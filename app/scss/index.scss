@@ -94,3 +94,20 @@
     }
   }
 }
+
+//----------- footer -----------
+
+.footer {
+  padding: 40px 0;
+  background-color: #670101;
+  color: #fff;
+
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    white-space: pre-wrap;
+  }
+}
