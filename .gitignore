@@ -9,4 +9,4 @@ dist/
 node_modules/
 package-lock.json
 app/css/*
-app/src/index.min.js
+app/js/index.min.js
