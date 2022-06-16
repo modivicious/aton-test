@@ -3,7 +3,6 @@ import dartSass from 'sass';
 import gulpSass from 'gulp-sass';
 import concat from "gulp-concat";
 import autoprefixer from "gulp-autoprefixer";
-import uglify from "gulp-uglify";
 import htmlmin from "gulp-htmlmin";
 import cleanCss from "gulp-clean-css";
 import imagemin, { gifsicle, mozjpeg, optipng, svgo } from "gulp-imagemin";
@@ -36,13 +35,6 @@ export const styles = () => {
     .pipe(browserSync.stream());
 };
 
-export const scripts = () => {
-  return gulp.src(["app/js/index.js"])
-    .pipe(concat("index.min.js"))
-    .pipe(gulp.dest("app/js"))
-    .pipe(browserSync.stream());
-};
-
 export const htmlMin = () => {
   return gulp.src("app/**/*.html")
     .pipe(htmlmin({ collapseWhitespace: true }))
@@ -53,12 +45,6 @@ export const cssMin = () => {
   return gulp.src("app/css/**/*.css")
     .pipe(cleanCss({ level: 2 }))
     .pipe(gulp.dest("dist/css"));
-};
-
-export const jsMin = () => {
-  return gulp.src("app/js/index.min.js")
-    .pipe(uglify())
-    .pipe(gulp.dest("dist/js"));
 };
 
 export const imagesMin = () => {
@@ -89,10 +75,6 @@ export const webpDel = () => {
   return del("app/images/**/*.webp");
 };
 
-export const buildFonts = () => {
-  return gulp.src("app/fonts/*").pipe(gulp.dest("dist/fonts"));
-};
-
 export const buildOther = () => {
   return gulp.src(["app/**/manifest.json"]).pipe(gulp.dest("dist"));
 };
@@ -103,11 +85,10 @@ export const cleanDist = () => {
 
 export const watching = () => {
   gulp.watch(["app/scss/**/*.scss"], styles);
-  gulp.watch(["app/js/**/*.js", "!app/js/index.min.js"], scripts);
   gulp.watch("app/images/**/*.{jpg,jpeg,png}").on("add", webp);
   gulp.watch(["app/**/*.html"]).on("change", browserSync.reload);
 };
 
-export const build = gulp.series(cleanDist, gulp.parallel(htmlMin, cssMin, jsMin, buildFonts, buildOther, imagesMin));
+export const build = gulp.series(cleanDist, gulp.parallel(htmlMin, cssMin, buildOther, imagesMin));
 
-export default gulp.parallel(styles, scripts, browsersync, watching);
+export default gulp.parallel(styles, browsersync, watching);
